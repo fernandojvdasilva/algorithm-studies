@@ -6,7 +6,7 @@ Created on 6 de out de 2017
 import unittest
 
 from careercup.min_diff_nodes_bst import BinarySearchTree, TreeNode
-
+from careercup.max_path_pyramid_graph import GraphNode, GraphEdge, PyramidGraph
 
 class Test(unittest.TestCase):
 
@@ -42,6 +42,46 @@ class Test(unittest.TestCase):
         
         assert(tree.min_diff_nodes() == float('inf'))
         
+
+    def testMaxPathPyramidGraph(self):
+        graph = PyramidGraph()
+
+        node1 = GraphNode(3)
+        
+        node2_1= GraphNode(9)
+        node2_2 = GraphNode(4)
+        
+        node1.add_edge(node2_1)
+        node1.add_edge(node2_2)
+        
+        node3_1 = GraphNode(1)
+        node3_2 = GraphNode(8)
+        node3_3 = GraphNode(2)
+        
+        node2_1.add_edge(node3_1)
+        node2_1.add_edge(node3_2)
+        node2_2.add_edge(node3_2)
+        node2_2.add_edge(node3_3)
+        
+        
+        node4_1 = GraphNode(4)
+        node4_2 = GraphNode(5)
+        node4_3 = GraphNode(8)
+        node4_4 = GraphNode(2)
+        
+        node3_1.add_edge(node4_1)
+        node3_1.add_edge(node4_2)
+        node3_2.add_edge(node4_2)
+        node3_2.add_edge(node4_3)
+        node3_3.add_edge(node4_3)
+        node3_3.add_edge(node4_4)
+        
+        graph.first_node = node1
+        
+        max_path = graph.get_max_path()
+        
+        assert(max_path == [node1, node2_1, node3_2, node4_3])
+
 
 
 if __name__ == "__main__":
