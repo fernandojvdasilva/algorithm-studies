@@ -6,7 +6,8 @@ Created on 6 de out de 2017
 import unittest
 
 from careercup.min_diff_nodes_bst import BinarySearchTree, TreeNode
-from careercup.max_path_pyramid_graph import GraphNode, GraphEdge, PyramidGraph
+from careercup.max_path_pyramid_graph import GraphNode, PyramidGraph
+from careercup.substring_anagram import check_anagram_substring
 
 class Test(unittest.TestCase):
 
@@ -82,6 +83,16 @@ class Test(unittest.TestCase):
         
         assert(max_path == [node1, node2_1, node3_2, node4_3])
 
+    
+    def testSubstringAnagrams(self):
+        
+        result = check_anagram_substring('LGE', 'GOOGLE')
+        
+        assert(result)
+        
+        result = check_anagram_substring('GEO', 'GOOGLE')
+        
+        assert(not result)
 
 
 if __name__ == "__main__":
