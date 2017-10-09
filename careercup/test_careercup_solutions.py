@@ -8,6 +8,7 @@ import unittest
 from careercup.min_diff_nodes_bst import BinarySearchTree, TreeNode
 from careercup.max_path_pyramid_graph import GraphNode, PyramidGraph
 from careercup.substring_anagram import check_anagram_substring
+from careercup.find_lonely_pixels import find_lonely_pixels
 
 class Test(unittest.TestCase):
 
@@ -93,6 +94,28 @@ class Test(unittest.TestCase):
         result = check_anagram_substring('GEO', 'GOOGLE')
         
         assert(not result)
+        
+    def testFindLonelyPixel(self):
+        
+        image = [ [0, 1, 1, 0, 0],
+                   [1, 1, 1, 1, 1],
+                   [0, 1, 0, 0, 1],
+                   [1, 0, 1, 1, 1] ]
+        
+        
+        result = find_lonely_pixels(image, 4, 5)
+        
+        assert(result == 1)
+        
+        [ [0, 1, 1, 0, 0],
+           [1, 1, 0, 1, 1],
+           [0, 1, 0, 0, 1],
+           [1, 0, 1, 1, 1] ]
+        
+        result = find_lonely_pixels(image, 4, 5)
+        
+        assert(result == 1)
+
 
 
 if __name__ == "__main__":
