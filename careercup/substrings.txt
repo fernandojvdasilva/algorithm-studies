@@ -1,0 +1,120 @@
+
+Google Interview Question for Software Engineers
+
+
+
+    Given a string A consisting of n characters and a string B consisting of m characters, write a function that will return the 
+number of times A must be stated such that B is a substring of the repeated A. If B can never be a substring, return -1.
+
+    Example:
+    A = ‘abcd’
+    B = ‘cdabcdab’
+    The function should return 3 because after stating A 3 times, getting ‘abcdabcdabcd’, B is now a substring of A.
+
+    You can assume that n and m are integers in the range [1, 1000].
+
+
+1 - Make sure you understood the problem (until 3:00 mins)		[2:12] (-1:12)
+2 - Think about some more examples (until 5:00 mins) 			[6:14] (+1:14)
+3 - Think about the SIMPLEST possible solution (until 10:00 mins)	-	?
+4 - Implement the SIMPLEST possible solution (until 15:00 mins)		[15:08] (+0:08)
+5 - Test the SIMPLEST possible solution (until 20:00 mins)		[20:48] (+0:48)
+6 - Think about optimizing (until 25:00 mins)				[32:40] (+7:40)
+total: 25 mins
+
+
+A = 'a'
+B = 'aaaaa' (A repeated 5 times) OK
+
+A = 'acb'						
+B = 'bac' (A = 'ac<bac>b')
+
+|------------|
+v            |
+a -> c -> b -|
+
+
+b -> a
+a -> c
+
+
+
+A = 'cba'
+B = 'acb' (A = 'cb<acb>a')
+
+A = 'bca'
+B = 'bac' (A = 'bcabcabca') Return -1
+
+|------------|
+v            |
+b -> c -> a -|
+
+c -> a
+a -> b
+
+b -> a
+a -> c
+
+A = 'badac' badacbadac
+
+
+A = 'cba'
+B = 'acbacb' (A = 'cb<acbacb>a')
+
+A = 'cb'
+B = 'cbcbcbcb' (A = 'cbcbcbcbcbcb')
+
+
+
+# SIMPLEST SOLUTION: repeat len(A) times or len(B)/len(A) times (whichever is greater)
+def is_repeated_sub(A, B): # A = bca  B = bac
+	num_reps = len(A) if len(A) > len(B)/len(A) else len(B)/len(A) # num_reps = 3
+	
+	rep_A = A # rep_A = bca
+	i = 0
+	found_sub = False
+	while i < num_reps and not found_sub:	# i = 2 num_reps = 3 found_sub = False
+		rep_A += A # rep_A = bcabcabcabca
+		if B in rep_A: # B = bac
+			found_sub = True
+		i += 1
+	
+	return i if found_sub else -1
+
+
+# OPTIMIZED SOLUTION:
+Build graph of A, in which the letters are the nodes and the sequences are the edges. Save the nodes in a hashlist with the pointer to 
+its node. Then navigate from the first node (corresponding to the first letter in A) until find the first node corresponding to the
+first letter of B (count whenever you find a node marked as E [end of A]). Accumulate a string with the letters. Stop when:
+	- The accumulated string is equal to B
+	- The node is not equal to the following letter in B (return -1)
+	- You arrived to the last letter of B
+
+A = 'bca'
+B = 'bac' (A = 'bcabcabca') Return -1
+
+|------------|
+v            |
+b -> c -> a -|
+S	  E
+
+|------------|
+v            |
+b -> a -> c -|
+S         E
+
+
+A = 'cba'
+B = 'acb' (A = 'cb<acb>a')
+
+|------------|
+v            |
+c -> b -> a -|
+S         E
+
+|------------|
+v            |
+a -> c -> b -|
+S         E
+
+

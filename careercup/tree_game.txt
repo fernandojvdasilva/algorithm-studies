@@ -1,0 +1,81 @@
+
+Google Interview Question for Software Engineers
+    
+
+    Tree Game
+    class TreeNode {
+    TreeNode parent; //parent node
+    TreeNode left; //left child
+    TreeNode right; //right child
+    }
+    Two people in a game, player scores by claiming nodes in binary tree, tree node class as shown above.
+    The player who eventually owns more nodes wins the game.
+    Player A and B each claims a node at first.
+    After the first round, a player will only be able to claim a node adjacent to any node owned by himself.
+    A tree node is adjacent to its parent, left right and right child.
+    A node owned cannot be re-claimed.
+    End game when all nodes are owned.
+    If player A gets the first claim at node N, find whether it is possible for player B to win.
+    If yes, find out which node player B should claim at his first move.
+
+    Follow up: if player B takes the first hand instead, which node should he pick?
+
+	
+
+				   8
+				3     5
+  			       1  1  1  3
+                                       1 1
+
+
+	def calc_adjacents(node, adj):
+		if not node.left is None:
+			adj[node] = calc_adjacents(node.left, adj)
+		if not node.right is None:
+			adj[node] = calc_adjacents(node.right, adj)
+
+
+		if not node.left is None:
+			adj[node] = 1
+		if not node.right is None:
+			adj[node] = 1
+		it not node.parent is None:
+			adj[node] += 1
+
+		
+		return adj[node]
+	
+	def find_root(node):
+		if node.parent is None:
+			return node
+		else:
+			return find_root(node)
+
+	def find_max_adj(node, adj):
+		if adj[node.left][1] > adj[node.right][1]:
+			return node.left
+		elif adj[node.left][1] < adj[node.right][1]:
+			return node.right
+		else:
+			return None
+		
+
+	def find_next_move(node):
+		adj = {}
+		root = find_root(node)
+
+		calc_adjacents(root, adj)
+		adj_list = [(k,adj[k]) for k in adj.keys()]
+
+		adj_list = sorted(adj_list, key=lambda x: x[1])		
+
+
+		i = 0
+		while i < len(adj_list) and node != adj_list[i][0]:
+			i += 1
+
+		# Missing one case: if the choosen node is the max adj below the first one, then we have to handle it...
+		if i == 0:
+			return find_max_adj(node, adj)
+		else:
+			return adj_list[i][0]

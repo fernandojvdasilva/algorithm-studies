@@ -1,0 +1,74 @@
+ Google Interview Question for Software Engineers
+
+    Given a max-heap represented as an array, return the kth largest element without modifying the heap. 
+I was asked to do it in linear time, but was told it can be done in log time
+
+
+1 - Make sure you understood the problem (until 3:00 mins)		
+2 - Think about some more examples (until 5:00 mins)
+3 - Try to think about some optimized solution (until 10:00 mins) 			
+3 - If you're stuck, think about the SIMPLEST possible solution (until 15:00 mins)	
+4 - Implement the solution (until 20:00 mins)		
+4 - Test the solution (until 25:00 mins)		
+6 - Think about optimizing (until 30:00 mins)				
+total: 30 mins
+
+
+heap = [10, 9, 8, 7, 6]
+k = 3
+res = 8
+
+heap = [10, 9, 7, 6, 8]
+k = 3
+res = 8
+
+heap = [10, 9, 5, 8, 7]
+k = 3
+res = 8
+
+SOLUTION CANDIDATE: Navigate through the heap until the kth child. Always keep the kth element in a stack. It will be O(log n)
+
+
+heap = [10, 9, 8, 7, 6]
+k = 3
+res = 8
+
+
+numbers=None
+
+def find_k_heap(heap, i, k):
+	if numbers is None:
+		numbers = [float('inf')*-1] * k
+		numbers[0] = heap[0]
+
+
+	# i = 0, k = 3
+	rc = 2 * (i + 1) # rc = 2
+	lc = 2 * i + 1	# lc = 1
+	
+	for x in [heap[rc], heap[lc]]: # [8, 9]
+		j = 0
+		while j < len(numbers): # len(numbers) = 3
+			if x > numbers[j]: # x = 9, numbers[1] = 8
+				l = len(numbers)-1 # l = 2
+				while l > j: 
+					numbers[l] = numbers[l-1] # numbers = [10, 9, 8]
+					l -= 1
+
+				numbers[j] = x	
+			j += 1
+
+	find_k_heap(heap, rc, k-1) 
+	find_k_heap(heap, lc, k-1)
+
+	return numbers[2]
+
+
+O(k log n)
+
+But it can be O(log n) + k if invert the first "while"
+
+			
+
+
+				

@@ -1,0 +1,68 @@
+
+Google Interview Question for Software Engineers
+
+
+    You are given a function bool rand_bit_p() that returns true with some unknown probability p and false with probability 1 - p.
+    Write function rand_bit() using rand_bit_p that will return true and false with equal probability 
+(that is, implement a fair coin, given unfair coin)
+
+1 - Make sure you understood the problem (until 3:00 mins)
+2 - Think about some more examples (until 5:00 mins) 			[5:18]  (+ 0:18)
+3 - Think about the SIMPLEST possible solution (until 10:00 mins)	[8:17]  (- 1:43)
+4 - Implement the SIMPLEST possible solution (until 15:00 mins)		[18:52] (+ 3:52)
+5 - Test the SIMPLEST possible solution (until 20:00 mins)		[28:22] (+ 8:22)
+6 - Think about optimizing (until 25:00 mins)				[36:39] (+ 11:39)
+total: 25 mins
+
+
+True xor True -> False
+True xor False -> True
+False xor True -> True
+False xor False -> False
+
+
+p = 0.4
+
+rand_bit_p() -> True
+rand_bit_p() -> False
+
+If I call rand_bit_p() 10 times -> True * 4 and False * 6
+If I call rand_bit() 10 times -> True * 5 and False * 5
+
+
+def rand_bit():
+	num_trues = 0
+	num_falses = 0
+	for i in range(100):
+		if rand_bit_p():
+			num_trues += 1
+		else:
+			num_falses += 1
+
+	# num_trues = 40, num_falses = 60
+
+	discard_true = num_trues > num_false   # False
+
+	if discard_true:
+		num_discard = num_trues - num_false
+	else:	 
+		num_discard = num_false - num_trues  # num_discard = 20
+	
+
+
+	# [True, False, True, True, True, False, False, False, False, False]
+	
+
+
+	res = False
+	for i in range(100):
+		rand = rand_bit_p() # rand = False, discard_true = False, num_discard = 0
+		if ((rand and discard_true) or (not rand and not discard_true)) and num_discard > 0:
+			num_discard -= 1
+			continue
+		else:
+			res ^= rand # rand = False
+
+	return res
+						
+	
