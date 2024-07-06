@@ -5,6 +5,10 @@ Created on 3 de out de 2017
 '''
 import unittest
 
+import os, sys
+sys.path.append(os.path.join(os.getcwd()))
+sys.path.append(os.path.join(os.getcwd(), ".."))
+
 from classic_algorithms.backtracking import solve_sudoku
 from classic_algorithms.binary_trees import BinarySearchTree, TreeNode
 from classic_algorithms.graphs import dijkstra_min_paths, GraphNode, print_minimum_path

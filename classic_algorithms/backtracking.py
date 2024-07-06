@@ -10,15 +10,7 @@ from copy import deepcopy
 def solve_sudoku(initial_game):
         game = deepcopy(initial_game)
         
-        i = j = 0
-        while i < len(game) and j < len(game[i]):
-            if game[i][j] == 0:
-                game[i][j] = None
-            
-            j += 1
-            if j == len(game[i]):
-                i += 1
-                j = 0
+        initialize(game)
         
         last_i = []
         last_j = []
@@ -28,7 +20,7 @@ def solve_sudoku(initial_game):
         n_initial = 1
 
         while j < len(game[0]):
-            if game[i][j] == initial_game[i][j]:
+            if game[i][j] == initial_game[i][j]: # Posiciona o primeiro número "novo"
                 if i < len(game):
                     i += 1
                 else:
@@ -118,3 +110,14 @@ def solve_sudoku(initial_game):
                 
                 
         return game
+
+def initialize(game):
+    i = j = 0
+    while i < len(game) and j < len(game[i]):
+        if game[i][j] == 0:
+            game[i][j] = None
+            
+        j += 1
+        if j == len(game[i]):
+            i += 1
+            j = 0
