@@ -83,10 +83,6 @@ class Solution:
                 res += roman_chars[factors[i]] * curr_alg
                 num -= curr_alg * factors[i]
 
-            elif curr_alg != 0:
-                res += roman_chars[factors[i]] * (curr_alg-3) + roman_chars[factors[i+1]]
-                num -= factors[i] * (curr_alg-3) + factors[i+1]
-
             i -= 1
             
 
