@@ -43,57 +43,49 @@ The number of nodes in the tree is in the range [0, 100].
 #         self.right = right
 class Solution:
 
-    def get_root_height(self, root: TreeNode, count: int=1) -> int:
-        left_height = count if root is None else self.get_root_height(root.left, count+1)
-        right_height = count if root is None else self.get_root_height(root.right, count+1)
-
-        return max(left_height, right_height)
-
-
-
-    def get_num_left_root(self, root: TreeNode, curr_count: int=0) -> int:
-        if root.left is None:
-            return curr_count
+    def count_columns_left(self, node: TreeNode) -> int:
+        if node is None:
+            return 0
         else:
-            return self.get_num_left_root(root.left, curr_count+1)
+            return max(self.count_columns_left(node.left) + 1, self.count_columns_left(node.right)-1)
 
-    def get_num_right_root(self, root: TreeNode, curr_count: int=0) -> int:
-        if root.right is None:
-            return curr_count
+    def count_columns_right(self, node: TreeNode) -> int:
+        if node is None:
+            return 0
         else:
-            return self.get_num_right_root(root.right, curr_count+1)
+            return max(self.count_columns_right(node.right) + 1, self.count_columns_right(node.left)-1)
 
-    def count_columns(self, root: TreeNode) -> (int, int): # a tuple with the (number of columns, root position)
-        num_left =  0 if root is None else self.get_num_left_root(root)
-        num_right = 0 if root is None else self.get_num_right_root(root)
+    def height(self, node: TreeNode) -> int:
+        if node is None:
+            return 0
+        else:
+            return max(self.height(node.left), self.height(node.right)) + 1
+    
 
-        return num_left + num_right + 1, num_left
-
-
-    def add_to_column_list(self, node: TreeNode, column_list: List[List[int]], index: int, level: int):
+    def getColumnVals(self, node: TreeNode, col: int, row: int, res: List[int], seek_col: int):
         if node is None:
             return
 
-        if level == 1:
-            column_list[index].append(node.val)
-        else:
-            self.add_to_column_list(node.left, column_list, index-1, level-1)
-            self.add_to_column_list(node.right, column_list, index+1, level-1)
+        if col == seek_col and row == 1:
+            res.append(node.val)
+
+        elif row > 1:
+            self.getColumnVals(node.left, col-1, row-1, res, seek_col)
+            self.getColumnVals(node.right, col+1, row-1, res, seek_col)
 
 
     def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        
-        if root is None:
-            num_columns = 0
-            pos_root = 0
-        else:
-            num_columns, pos_root = self.count_columns(root)
+        num_cols_left = self.count_columns_left(root)
+        num_columns = num_cols_left + self.count_columns_right(root) - 1
 
-        column_list = [[] for _ in range(num_columns)]
+        h = self.height(root)
 
-        h = self.get_root_height(root)
+        res = []
 
-        for i in range(1, h+1):
-            self.add_to_column_list(root, column_list, pos_root, i)
+        for i in range(1, num_columns+1):
+            curr_res = []
+            for j in range(1, h+1):
+                self.getColumnVals(root, num_cols_left, j, curr_res, i)
+            res.append(curr_res)
 
-        return column_list
+        return res
